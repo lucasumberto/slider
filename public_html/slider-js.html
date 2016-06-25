@@ -1,0 +1,59 @@
+
+<!-- referencia api do polymer -->
+<link rel="import" href="bower_components/polymer/polymer.html">
+
+<dom-module id="x-slider">
+    
+    <style>
+        
+        #imagens{
+            color: blue;
+        }
+        
+    </style>
+    
+    <template>
+        <center>
+            <div id="container">
+                <div id="imagens">
+                    <img src="">Render imgs from src here
+                </div>
+                <div id="Buttons">
+                    <button name="voltar" id="botaoVoltar" on-click="botaoVoltar" ><<</button>
+                    <button name="pausar" id="botaoPausar" >||</button>
+                    <button name="avancar" id="botaoAvancar" >>></button>
+                </div>
+            </div>
+        </center>
+    </template>
+
+</dom-module>
+
+<script>
+        Polymer({
+            is: 'x-slider',
+            properies: {
+                controlVisible: {
+                    type: Boolean,
+                    value: false
+                },
+                interval: {
+                    type: Number,
+                    value: 0
+                },
+                imageFolder: {
+                    type: String,
+                    value: ''
+                }
+            },
+            listeners: {
+                '#botaoVoltar click': 'botaoVoltar',
+            },
+            botaoVoltar: function () {
+                console.log('clicked');
+            },
+            ready: function () {
+                this.$.botaoVoltar.hidden = !this.controlVisible;
+            }
+        })
+</script>
