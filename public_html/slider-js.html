@@ -1,5 +1,5 @@
 
-<!-- referencia api do polymer -->
+<!-- referencia do polymer -->
 <link rel="import" href="bower_components/polymer/polymer.html">
 
 <dom-module id="x-slider">
@@ -16,7 +16,7 @@
         <center>
             <div id="container">
                 <div id="imagens">
-                    <img src="">Render imgs from src here
+                    Render imgs from src here
                 </div>
                 <div id="Buttons">
                     <button name="voltar" id="botaoVoltar" on-click="botaoVoltar" ><<</button>
@@ -47,12 +47,13 @@
                 }
             },
             listeners: {
-                '#botaoVoltar click': 'botaoVoltar',
+                '#botaoVoltar click': 'botaoVoltar'
             },
             botaoVoltar: function () {
                 console.log('clicked');
             },
             ready: function () {
+                console.log(this.controlVisible);
                 this.$.botaoVoltar.hidden = !this.controlVisible;
             }
         })
