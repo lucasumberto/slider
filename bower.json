@@ -1,0 +1,20 @@
+{
+  "name": "sliderjs",
+  "homepage": "https://github.com/lucasumberto/slider",
+  "description": "t4dso2",
+  "main": "",
+  "authors": [
+    "Lucas Umberto"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "^1.5.0"
+  }
+}
