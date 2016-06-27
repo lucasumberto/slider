@@ -3,23 +3,54 @@
 <link rel="import" href="bower_components/polymer/polymer.html">
 
 <dom-module id="x-slider">
-    
-    <style>
-        
-        #imagens{
-            color: blue;
-        }
-        
-    </style>
-    
+
     <template>
+
+        <style>
+            :host {
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+                display: block;
+                width: 350px;
+                height: 250px;
+            }
+            #imagens{
+                position: relative;
+                width: 100%;
+                height: 100%;
+
+            }
+            #imagens ::content img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                opacity: 0;
+                width: 350px;
+                height: 250px;
+            }
+            polyfill-next-selector {
+                content: '#imagens img';
+            }
+            #botoes{
+                position: relative;
+                opacity: 0;
+                top: 220px;
+            }
+            #botoes:hover{
+                opacity: 1;
+            }
+
+        </style>
+
         <center>
             <div id="container">
                 <div id="imagens">
-                    Render imgs from src here!
+                    <content select="img"></content>
+                    <!-- Renderiza imgs aqui! -->
                 </div>
-                <div id="Buttons">
-                    <button name="voltar" id="botaoVoltar" on-click="botaoVoltar" ><<</button>
+                <div id="botoes">
+                    <button name="voltar" id="botaoVoltar" ><<</button>
                     <button name="pausar" id="botaoPausar" >||</button>
                     <button name="avancar" id="botaoAvancar" >>></button>
                 </div>
@@ -30,31 +61,108 @@
 </dom-module>
 
 <script>
-        Polymer({
-            is: 'x-slider',
-            properies: {
-                controlVisible: {
-                    type: Boolean,
-                    value: false
-                },
-                interval: {
-                    type: Number,
-                    value: 0
-                },
-                imageFolder: {
-                    type: String,
-                    value: ''
-                }
+    Polymer({
+        is: 'x-slider',
+        properties: {
+            controlVisible: {
+                type: Boolean,
+                value: false,
+                //quando o valor da propriedade for alterada será serializado para garantir que o att foi adicionado as propriedades
+                reflectToAttribute: true
             },
-            listeners: {
-                '#botaoVoltar click': 'botaoVoltar'
+            interval: {
+                type: Number,
+                value: 1000,
+                reflectToAttribute: true
             },
-            botaoVoltar: function () {
-                console.log('clicked');
-            },
-            ready: function () {
-                console.log(this.controlVisible);
-                this.$.botaoVoltar.hidden = !this.controlVisible;
+            autoSlide: {
+                type: Boolean,
+                value: true,
+                reflectToAttribute: true
             }
-        })
+        },
+        currentImg: 0,
+        intervalId: 0,
+        listeners: {
+            'botaoVoltar.click': 'botaoVoltar',
+            'botaoPausar.click': 'botaoPausar',
+            'botaoAvancar.click': 'botaoAvancar'
+        },
+        botaoVoltar: function () {
+
+            this.imgs[this.currentImg].style.opacity = 0;
+            this.voltarImagem().style.opacity = 1;
+        },
+        voltarImagem: function () {
+            if (this.currentImg - 1 < 0) {
+                this.currentImg = this.imgs.length;
+            }
+            this.currentImg = (this.currentImg - 1) % this.imgs.length;
+            return this.imgs[this.currentImg];
+        },
+        botaoAvancar: function () {
+
+            this.imgs[this.currentImg].style.opacity = 0;
+            this.proximaImagem().style.opacity = 1;
+        },
+        proximaImagem: function () {
+            this.currentImg = (this.currentImg + 1) % this.imgs.length;
+            return this.imgs[this.currentImg];
+        },
+        botaoPausar: function () {
+
+            this.autoSlide = !this.autoSlide;
+            this.sliding();
+        },
+        sliding: function () {
+            //inicia auto slider                
+            if (this.autoSlide) {
+                this.intervalId = setInterval((function (self) {
+                    return function () {
+                        //a cada intervalo chamafuncao do botao avancar
+                        self.botaoAvancar();
+                    };
+                })(this), this.interval);
+                this.$.botaoPausar.textContent  = '||';
+            } else {
+                //pausa o intervalo
+                clearInterval(this.intervalId);
+                this.$.botaoPausar.textContent  = '|>';
+            }
+        },
+        //inicia o componente
+        ready: function () {
+            //inicia control visible com os valores
+            this.$.botaoVoltar.hidden = !this.controlVisible;
+            this.$.botaoPausar.hidden = !this.controlVisible;
+            this.$.botaoAvancar.hidden = !this.controlVisible;
+        },
+        //callback depois que o componente foi carregado na pagina
+        attached: function () {
+
+            this.async(function () {
+                //cria array com as tags img dentro da tag <x-slider> no index.html
+                this.imgs = Polymer.dom(this).querySelectorAll("img");
+
+
+                if (this.imgs.length >= 0) {
+                    this.imgs[0].style.opacity = 1;
+                }
+                
+                //inicia auto slide
+                if (this.autoSlide) {    
+                  this.intervalId = setInterval((function (self) {
+                        return function () {
+                            //a cada intervalo chamafuncao do botao avancar
+                            self.botaoAvancar();
+                        };
+                    })(this), this.interval);
+                }else{
+                    this.$.botaoPausar.textContent  = '|>';
+                }
+
+
+            });
+        }
+    });
 </script>

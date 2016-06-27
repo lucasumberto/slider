@@ -9,26 +9,36 @@ and open the template in the editor.
         <title>Slider-js teste</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
+        <link rel="shortcut icon" href="favicon.ico">
+
         <!-- referencia arquivo css-->
         <script src="css.css" type="text/css"></script>
-        
+
         <!-- referencia arquivos js de dependencias -->
         <script src="js/libs/jquery.js" ></script>
         <script ></script>
-       
+
         <!-- Import do component -->
         <link rel="import" href="slider-js.html">
         <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
-        
+
     </head>
     <body>
         <span>With control-visible:</span>
-        <x-slider control-visible=true ></x-slider>
+        <x-slider control-visible=true interval=1000 >
+
+            <img src="img/1.jpg"/>
+            <img src="img/2.jpg"/>
+
+        </x-slider>
+
 
         <span>Without control-visible:</span>
-        <x-slider></x-slider>
+        <x-slider image-folder="img">
+            <img src="img/1.jpg"/>
+            <img src="img/2.jpg"/>
+        </x-slider>
 
 
-    </body>
+</body>
 </html>
