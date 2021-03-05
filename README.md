@@ -1,7 +1,6 @@
 # slider
-aulda dso2
-
 study case
+aula dso2 UFSC
 
 Create a reusable slider/carousel web component using polymer having 3 attributes
 
